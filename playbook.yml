@@ -1,0 +1,16 @@
+- name: Deploy Website
+  hosts: webserver
+  become: yes
+
+  tasks:
+    - name: Create deployment folder
+      file:
+        path: /var/www/html/Midterm-2026/pengseyha
+        state: directory
+        mode: '0755'
+
+    - name: Copy website files
+      copy:
+        src: src/main/resources/static/
+        dest: /var/www/html/Midterm-2026/pengseyha/
+        mode: '0644'
