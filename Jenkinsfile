@@ -6,33 +6,25 @@ pipeline {
     }
 
     stages {
-        stage('Check Java 25') {
-            steps {
-                sh '''
-                ls -la /opt/java/jdk-25.0.3/bin/java
-                /opt/java/jdk-25.0.3/bin/java -version
-                '''
-            }
-        }
 
         stage('Build') {
             steps {
-                withEnv([
-                    'JAVA_HOME=/opt/java/jdk-25.0.3',
-                    'PATH+JAVA=/opt/java/jdk-25.0.3/bin'
-                ]) {
-                    sh '''
-                    echo "JAVA_HOME=$JAVA_HOME"
-                    which java
-                    java -version
-                    ./mvnw clean package
-                    '''
-                }
+                sh '''
+                export JAVA_HOME=/opt/java/jdk-25.0.3
+                export PATH=$JAVA_HOME/bin:$PATH
+
+                echo "JAVA_HOME=$JAVA_HOME"
+                which java
+                java -version
+
+                ./mvnw clean package
+                '''
             }
         }
     }
 
     post {
+
         success {
             emailext(
                 subject: "SpringBoot_PengSeyha SUCCESS",
