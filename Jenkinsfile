@@ -3,23 +3,31 @@ pipeline {
 
     environment {
         PROJECT_NAME = "SpringBoot_PengSeyha"
-        JAVA_HOME = "/opt/java/jdk-25.0.3"
-        PATH = "/opt/java/jdk-25.0.3/bin:${env.PATH}"
     }
 
     stages {
-        stage('Check Java Version') {
+        stage('Check Java 25') {
             steps {
                 sh '''
-                java -version
-                echo $JAVA_HOME
+                ls -la /opt/java/jdk-25.0.3/bin/java
+                /opt/java/jdk-25.0.3/bin/java -version
                 '''
             }
         }
 
         stage('Build') {
             steps {
-                sh './mvnw clean package'
+                withEnv([
+                    'JAVA_HOME=/opt/java/jdk-25.0.3',
+                    'PATH+JAVA=/opt/java/jdk-25.0.3/bin'
+                ]) {
+                    sh '''
+                    echo "JAVA_HOME=$JAVA_HOME"
+                    which java
+                    java -version
+                    ./mvnw clean package
+                    '''
+                }
             }
         }
     }
@@ -35,8 +43,7 @@ Project: ${PROJECT_NAME}
 Build Number: ${BUILD_NUMBER}
 Build URL: ${BUILD_URL}
 """,
-                to: 'pengseyha2005@gmail.com',
-                from: 'pengseyha2005@gmail.com'
+                to: 'pengseyha2005@gmail.com'
             )
         }
 
@@ -53,8 +60,7 @@ Build URL: ${BUILD_URL}
 Check console output:
 ${BUILD_URL}console
 """,
-                to: 'pengseyha2005@gmail.com',
-                from: 'pengseyha2005@gmail.com'
+                to: 'pengseyha2005@gmail.com'
             )
         }
     }
