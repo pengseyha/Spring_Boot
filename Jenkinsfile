@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         PROJECT_NAME = "SpringBoot_PengSeyha"
-        JAVA_HOME = "/opt/java/jdk-25.0.1"
-        PATH = "/opt/java/jdk-25.0.1/bin:${env.PATH}"
+        JAVA_HOME = "/opt/java/jdk-25.0.3"
+        PATH = "/opt/java/jdk-25.0.3/bin:${env.PATH}"
     }
 
     stages {
