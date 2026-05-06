@@ -9,11 +9,13 @@ pipeline {
                 export PATH=$JAVA_HOME/bin:$PATH
 
                 echo "JAVA_HOME=$JAVA_HOME"
-                /opt/java/jdk-25.0.3/bin/java -version
-                /opt/java/jdk-25.0.3/bin/javac -version
+
+                java -version
+                javac -version
 
                 chmod +x mvnw
-                ./mvnw clean package
+
+                ./mvnw clean package -DskipTests
                 '''
             }
         }
@@ -22,7 +24,7 @@ pipeline {
     post {
         success {
             emailext(
-                subject: "SpringBoot_PengSeyha SUCCESS",
+                subject: "SpringBoot-PengSeyha SUCCESS",
                 body: "SUCCESS BUILD\nBuild Number: ${BUILD_NUMBER}\nBuild URL: ${BUILD_URL}",
                 to: "pengseyha2005@gmail.com"
             )
@@ -30,7 +32,7 @@ pipeline {
 
         failure {
             emailext(
-                subject: "SpringBoot_PengSeyha FAILED",
+                subject: "SpringBoot-PengSeyha FAILED",
                 body: "FAILED BUILD\nBuild Number: ${BUILD_NUMBER}\nBuild URL: ${BUILD_URL}\nConsole: ${BUILD_URL}console",
                 to: "pengseyha2005@gmail.com"
             )
