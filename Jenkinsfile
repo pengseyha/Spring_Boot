@@ -6,14 +6,6 @@ pipeline {
     }
 
     stages {
-
-        stage('Checkout') {
-            steps {
-                git branch: 'main',
-                url: 'https://github.com/pengseyha/Spring_Boot.git'
-            }
-        }
-
         stage('Build') {
             steps {
                 sh './mvnw clean package'
@@ -22,7 +14,6 @@ pipeline {
     }
 
     post {
-
         success {
             emailext(
                 subject: "SpringBoot_PengSeyha SUCCESS",
@@ -33,7 +24,8 @@ Project: ${PROJECT_NAME}
 Build Number: ${BUILD_NUMBER}
 Build URL: ${BUILD_URL}
 """,
-                to: 'pengseyha2005@gmail.com'
+                to: 'pengseyha2005@gmail.com',
+                from: 'pengseyha2005@gmail.com'
             )
         }
 
@@ -47,9 +39,11 @@ Project: ${PROJECT_NAME}
 Build Number: ${BUILD_NUMBER}
 Build URL: ${BUILD_URL}
 
-Check console output for stacktrace.
+Check console output for stacktrace:
+${BUILD_URL}console
 """,
-                to: 'pengseyha2005@gmail.com'
+                to: 'pengseyha2005@gmail.com',
+                from: 'pengseyha2005@gmail.com'
             )
         }
     }
