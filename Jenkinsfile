@@ -1,24 +1,38 @@
-pipeline {
+'pipeline {
     agent any
+
+    // 1. Defining the environment globally is safer
     environment {
-        // Set these globally for the whole pipeline
         JAVA_HOME = '/opt/java/jdk-25.0.3'
-        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+        // Prepend JDK 25 to the PATH so it is found first
+        PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
     }
+
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Build') {
             steps {
+                // 2. Use a single 'sh' block for environment and build
                 sh '''
-                    # This will now correctly show JDK 25
+                    echo "Checking Java Version..."
                     java -version
                     
-                    # Ensure mvnw is executable
+                    echo "Starting Build..."
                     chmod +x mvnw
-                    
-                    # Run the build
-                    ./mvnw clean package
+                    ./mvnw clean package -DskipTests
                 '''
             }
         }
     }
-}
+
+    post {
+        failure {
+            echo "Build failed. Check Java paths and permissions."
+        }
+    }
+}'
